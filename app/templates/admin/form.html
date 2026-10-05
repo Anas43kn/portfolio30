@@ -20,7 +20,7 @@
     {% elif config.images is defined and field in config.images %}
       <label>{{ field.replace("_", " ") }}
         {% if value %}
-          <img class="admin-image-preview" src="{{ value if value.startswith('http') else url_for('static', path=value) }}" alt="{{ field.replace('_', ' ') }} preview">
+          <img class="admin-image-preview" src="{{ value if value.startswith('http') else '/static/' ~ value }}" alt="{{ field.replace('_', ' ') }} preview">
         {% endif %}
         <input type="text" name="{{ field }}" value="{{ value }}" placeholder="uploads/example.jpg or external URL">
         <input type="file" name="{{ field }}_file" accept="image/png,image/jpeg,image/webp,image/gif">

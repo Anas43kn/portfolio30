@@ -9,7 +9,7 @@
   <div class="cards">
     {% for post in blog_posts %}
       <a class="card reveal image-aware-card" href="/blog/{{ post.slug }}"
-         {% if post.cover_image %}style="--card-image: url('{{ post.cover_image if post.cover_image.startswith('http') else url_for('static', path=post.cover_image) }}')"{% endif %}>
+         {% if post.cover_image %}style="--card-image: url('{{ post.cover_image if post.cover_image.startswith('http') else '/static/' ~ post.cover_image }}')"{% endif %}>
         <div class="title"><h3>{{ post.title }}</h3><div class="tag">{{ post.category }}</div></div>
         <p>{{ post.excerpt }}</p>
       </a>

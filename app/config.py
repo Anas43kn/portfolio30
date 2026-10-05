@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     admin_email: str = "admin@admin.com"
     admin_password: str = "wxcvbn,;:!1234567890"
     max_upload_mb: int = 5
+    trusted_proxy_ips: str = "*"
 
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 

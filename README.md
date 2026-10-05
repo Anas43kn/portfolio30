@@ -126,6 +126,7 @@ SECRET_KEY=change-me-in-production
 ADMIN_EMAIL=admin@example.com
 ADMIN_PASSWORD=change-me
 MAX_UPLOAD_MB=5
+TRUSTED_PROXY_IPS=*
 ```
 
 What they do:
@@ -135,6 +136,7 @@ What they do:
 - `ADMIN_EMAIL`: first admin account email created by the seed script.
 - `ADMIN_PASSWORD`: first admin account password created by the seed script.
 - `MAX_UPLOAD_MB`: maximum allowed image upload size per file.
+- `TRUSTED_PROXY_IPS`: proxy IPs trusted for `X-Forwarded-Proto`; `*` is practical on managed platforms such as Northflank.
 
 For production, use a real secret:
 
@@ -1840,6 +1842,27 @@ Before deploying:
 9. Add proper email sending for TLDR newsletters.
 10. Add image resizing/compression for uploaded media.
 11. Add rate limiting before multiple users sign in.
+
+### HTTPS Proxy / Northflank Mixed Content
+
+Managed hosts such as Northflank usually terminate HTTPS before traffic reaches Uvicorn. Without proxy header support, FastAPI may think the request scheme is `http` and generate insecure asset URLs.
+
+This project handles that in two ways:
+
+- Uvicorn starts with `--proxy-headers --forwarded-allow-ips '*'`.
+- Static asset links in templates use root-relative paths such as `/static/css/style.css`.
+
+If you still see mixed-content warnings, check that the deployed command includes:
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --proxy-headers --forwarded-allow-ips '*'
+```
+
+And keep this environment variable:
+
+```env
+TRUSTED_PROXY_IPS=*
+```
 
 ## Mental Model
 

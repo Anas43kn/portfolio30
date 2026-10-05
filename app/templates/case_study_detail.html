@@ -6,7 +6,7 @@
   <h1 class="headline">{{ case_study.title }}</h1>
   <p class="lede">{{ case_study.subtitle or case_study.short_description }}</p>
   {% if case_study.cover_image %}
-    <img class="detail-image" src="{{ case_study.cover_image if case_study.cover_image.startswith('http') else url_for('static', path=case_study.cover_image) }}" alt="{{ case_study.title }}">
+    <img class="detail-image" src="{{ case_study.cover_image if case_study.cover_image.startswith('http') else '/static/' ~ case_study.cover_image }}" alt="{{ case_study.title }}">
   {% endif %}
   <div class="modal-grid static-detail">
     <div class="mblock"><h3>Context</h3><p>{{ case_study.context }}</p></div>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Digital Industrial Systems Architect{% endblock %}</title>
     <meta name="description" content="Hands-on Digital Industrial Systems Architect. Automation, data, and production integration.">
-    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+    <link rel="stylesheet" href="/static/css/style.css">
   </head>
   <body>
     <header class="topbar">
@@ -35,6 +35,6 @@
     <main class="wrap">
       {% block content %}{% endblock %}
     </main>
-    <script src="{{ url_for('static', path='js/main.js') }}"></script>
+    <script src="/static/js/main.js"></script>
   </body>
 </html>

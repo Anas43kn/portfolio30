@@ -14,7 +14,7 @@
     {% if key == "profile_image" %}
       <label>{{ key.replace("_", " ") }}
         {% if settings.get(key, "") %}
-          <img class="admin-image-preview" src="{{ settings.get(key, '') if settings.get(key, '').startswith('http') else url_for('static', path=settings.get(key, '')) }}" alt="Profile image preview">
+          <img class="admin-image-preview" src="{{ settings.get(key, '') if settings.get(key, '').startswith('http') else '/static/' ~ settings.get(key, '') }}" alt="Profile image preview">
         {% endif %}
         <textarea name="{{ key }}" rows="2" placeholder="uploads/unnamed.jpg or external URL">{{ settings.get(key, "") }}</textarea>
         <input type="file" name="profile_image_file" accept="image/png,image/jpeg,image/webp,image/gif">

@@ -9,7 +9,7 @@
   <div class="project-grid">
     {% for project in projects %}
       <a class="project-card reveal" href="/projects/{{ project.slug }}"
-         {% if project.cover_image %}style="--project-image: url('{{ project.cover_image if project.cover_image.startswith('http') else url_for('static', path=project.cover_image) }}')"{% endif %}>
+         {% if project.cover_image %}style="--project-image: url('{{ project.cover_image if project.cover_image.startswith('http') else '/static/' ~ project.cover_image }}')"{% endif %}>
         <div class="project-card-content">
           <div class="title"><h3>{{ project.title }}</h3><div class="tag">{{ project.project_type }}</div></div>
           <p>{{ project.description }}</p>
