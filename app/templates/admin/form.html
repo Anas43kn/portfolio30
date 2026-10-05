@@ -1,0 +1,44 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ "Edit" if item else "New" }} {{ config.title }}{% endblock %}
+{% block content %}
+<div class="admin-head">
+  <div>
+    <div class="kicker"><span>FORM</span> / {{ config.title }}</div>
+    <h1>{{ "Edit" if item else "New" }} {{ config.title }}</h1>
+  </div>
+  <a class="btn" href="/admin/{{ entity }}">Back</a>
+</div>
+
+<form class="admin-form" method="post" enctype="multipart/form-data">
+  {% for field in config.fields %}
+    {% set value = item|attr(field) if item else "" %}
+    {% if field in config.bools %}
+      <label class="check-row">
+        <input type="checkbox" name="{{ field }}" {% if value %}checked{% endif %}>
+        <span>{{ field.replace("_", " ") }}</span>
+      </label>
+    {% elif config.images is defined and field in config.images %}
+      <label>{{ field.replace("_", " ") }}
+        {% if value %}
+          <img class="admin-image-preview" src="{{ value if value.startswith('http') else url_for('static', path=value) }}" alt="{{ field.replace('_', ' ') }} preview">
+        {% endif %}
+        <input type="text" name="{{ field }}" value="{{ value }}" placeholder="uploads/example.jpg or external URL">
+        <input type="file" name="{{ field }}_file" accept="image/png,image/jpeg,image/webp,image/gif">
+      </label>
+    {% elif field == "display_order" %}
+      <label>{{ field.replace("_", " ") }}
+        <input type="number" name="{{ field }}" value="{{ value or 0 }}">
+      </label>
+    {% elif field in config.long %}
+      <label>{{ field.replace("_", " ") }}
+        <textarea name="{{ field }}" rows="{{ 12 if field in ['content', 'code_line'] else 5 }}">{{ value }}</textarea>
+      </label>
+    {% else %}
+      <label>{{ field.replace("_", " ") }}
+        <input type="text" name="{{ field }}" value="{{ value }}">
+      </label>
+    {% endif %}
+  {% endfor %}
+  <button class="btn primary" type="submit">Save</button>
+</form>
+{% endblock %}

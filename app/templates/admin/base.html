@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Admin{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+  </head>
+  <body class="admin-body">
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="/admin">Portfolio Admin</a>
+      <nav>
+        <a href="/admin/case-studies">Case Studies</a>
+        <a href="/admin/projects">Projects</a>
+        <a href="/admin/blogs">Blog Posts</a>
+        <a href="/admin/services">Services</a>
+        <a href="/admin/impact">Impact</a>
+        <a href="/admin/experience">Experience</a>
+        <a href="/admin/system-layers">System Layers</a>
+        <a href="/admin/approach">Approach</a>
+        <a href="/admin/settings">Settings</a>
+      </nav>
+      <form action="/admin/logout" method="post">
+        <button class="btn" type="submit">Logout</button>
+      </form>
+    </aside>
+    <main class="admin-main">
+      {% block content %}{% endblock %}
+    </main>
+  </body>
+</html>

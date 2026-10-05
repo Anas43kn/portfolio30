@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}{{ project.title }}{% endblock %}
+{% block content %}
+<article class="page project-detail">
+  <div class="kicker"><span>PROJECT</span> / {{ project.project_type }}</div>
+  <h1 class="headline">{{ project.title }}</h1>
+  <p class="lede">{{ project.description }}</p>
+  {% if project.cover_image %}
+    <img class="detail-image" src="{{ project.cover_image if project.cover_image.startswith('http') else url_for('static', path=project.cover_image) }}" alt="{{ project.title }}">
+  {% endif %}
+  <div class="modal-grid static-detail">
+    <div class="mblock"><h3>Stack</h3><p>{{ project.stack }}</p></div>
+    <div class="mblock"><h3>Impact</h3><p>{{ project.impact }}</p></div>
+  </div>
+</article>
+{% endblock %}

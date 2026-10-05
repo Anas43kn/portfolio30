@@ -1,0 +1,38 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ config.title }}{% endblock %}
+{% block content %}
+<div class="admin-head">
+  <div>
+    <div class="kicker"><span>EDIT</span> / {{ config.title }}</div>
+    <h1>{{ config.title }}</h1>
+  </div>
+  <a class="btn primary" href="/admin/{{ entity }}/new">New</a>
+</div>
+
+<div class="admin-table">
+  <div class="admin-row admin-row-head">
+    <span>Title</span>
+    <span>Status</span>
+    <span>Order</span>
+    <span>Actions</span>
+  </div>
+  {% for item in items %}
+    <div class="admin-row">
+      <span>{{ item_label(item) }}</span>
+      <span>{{ "on" if item|attr(config.status) else "off" }}</span>
+      <span>{{ item.display_order if item.display_order is defined else "-" }}</span>
+      <span class="row-actions">
+        <a class="btn" href="/admin/{{ entity }}/{{ item.id }}/edit">Edit</a>
+        {% if config.public_prefix is defined and item.slug is defined %}
+          <a class="btn" href="{{ config.public_prefix }}/{{ item.slug }}">Preview</a>
+        {% endif %}
+        <form action="/admin/{{ entity }}/{{ item.id }}/toggle" method="post">
+          <button class="btn" type="submit">{{ "Unpublish" if item|attr(config.status) else "Publish" }}</button>
+        </form>
+      </span>
+    </div>
+  {% else %}
+    <div class="empty-admin">No entries yet.</div>
+  {% endfor %}
+</div>
+{% endblock %}

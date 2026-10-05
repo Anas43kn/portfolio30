@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Digital Industrial Systems Architect{% endblock %}</title>
+    <meta name="description" content="Hands-on Digital Industrial Systems Architect. Automation, data, and production integration.">
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="/">
+          <span class="name">{{ settings.name if settings is defined and settings.name else "YOUR NAME" }}</span>
+          <span class="role">{{ settings.role if settings is defined and settings.role else "digital.industrial.systems.architect" }}</span>
+        </a>
+        <nav aria-label="Primary navigation">
+          <a class="navlink" href="/#services">Services</a>
+          <a class="navlink" href="/#work">Work</a>
+          <a class="navlink" href="/#projects">Projects</a>
+          <a class="navlink" href="/#experience">Experience</a>
+          <a class="navlink" href="/#layers">System Layers</a>
+          <a class="navlink" href="/#approach">Approach</a>
+          <a class="navlink" href="/blog">Blog</a>
+          <a class="navlink" href="/#contact">Contact</a>
+        </nav>
+        <div class="actions">
+          <button class="toggle" id="themeToggle" type="button" aria-label="Toggle theme">
+            <span>Light</span><span class="slash">/</span><span>Dark</span>
+          </button>
+          <a class="btn primary" href="/#work">View Work</a>
+        </div>
+      </div>
+    </header>
+    <main class="wrap">
+      {% block content %}{% endblock %}
+    </main>
+    <script src="{{ url_for('static', path='js/main.js') }}"></script>
+  </body>
+</html>

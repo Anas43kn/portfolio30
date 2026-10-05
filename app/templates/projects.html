@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Projects{% endblock %}
+{% block content %}
+<section class="page">
+  <div class="section-head">
+    <div class="kicker"><span>PRJ</span> / PROJECTS</div>
+    <div class="subnote">published technical builds</div>
+  </div>
+  <div class="project-grid">
+    {% for project in projects %}
+      <a class="project-card reveal" href="/projects/{{ project.slug }}"
+         {% if project.cover_image %}style="--project-image: url('{{ project.cover_image if project.cover_image.startswith('http') else url_for('static', path=project.cover_image) }}')"{% endif %}>
+        <div class="project-card-content">
+          <div class="title"><h3>{{ project.title }}</h3><div class="tag">{{ project.project_type }}</div></div>
+          <p>{{ project.description }}</p>
+          <div class="stack"><span>{{ project.stack }}</span><span class="impact">{{ project.impact }} -&gt;</span></div>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

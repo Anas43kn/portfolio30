@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
+<article class="page article">
+  <div class="kicker"><span>NOTE</span> / {{ post.category }}</div>
+  <h1 class="headline">{{ post.title }}</h1>
+  <p class="lede">{{ post.excerpt }}</p>
+  {% if post.cover_image %}
+    <img class="detail-image" src="{{ post.cover_image if post.cover_image.startswith('http') else url_for('static', path=post.cover_image) }}" alt="{{ post.title }}">
+  {% endif %}
+  {% if post.content_format == "html" %}
+    <div class="article-body html-zone">{{ post.content | safe }}</div>
+  {% else %}
+    <div class="article-body">{{ post.content }}</div>
+  {% endif %}
+</article>
+{% endblock %}

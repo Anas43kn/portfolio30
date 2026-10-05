@@ -1,0 +1,30 @@
+{% extends "admin/base.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<div class="admin-head">
+  <div>
+    <div class="kicker"><span>SITE</span> / SETTINGS</div>
+    <h1>Homepage settings</h1>
+  </div>
+  <a class="btn" href="/">Preview site</a>
+</div>
+
+<form class="admin-form" method="post" enctype="multipart/form-data">
+  {% for key in keys %}
+    {% if key == "profile_image" %}
+      <label>{{ key.replace("_", " ") }}
+        {% if settings.get(key, "") %}
+          <img class="admin-image-preview" src="{{ settings.get(key, '') if settings.get(key, '').startswith('http') else url_for('static', path=settings.get(key, '')) }}" alt="Profile image preview">
+        {% endif %}
+        <textarea name="{{ key }}" rows="2" placeholder="uploads/unnamed.jpg or external URL">{{ settings.get(key, "") }}</textarea>
+        <input type="file" name="profile_image_file" accept="image/png,image/jpeg,image/webp,image/gif">
+      </label>
+    {% else %}
+      <label>{{ key.replace("_", " ") }}
+        <textarea name="{{ key }}" rows="{{ 4 if key in ['hero_title', 'hero_subtitle', 'profile_badges'] else 2 }}">{{ settings.get(key, "") }}</textarea>
+      </label>
+    {% endif %}
+  {% endfor %}
+  <button class="btn primary" type="submit">Save settings</button>
+</form>
+{% endblock %}

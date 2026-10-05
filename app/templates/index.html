@@ -1,0 +1,220 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero" id="top" aria-label="Hero">
+  <div class="grid" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="kicker"><span>00</span> / HERO</div>
+      <h1 class="headline reveal">{{ settings.hero_title }}</h1>
+      <p class="lede reveal">{{ settings.hero_subtitle }}</p>
+      <div class="micro reveal">{{ settings.hero_microline }}</div>
+      <div class="hero-actions reveal">
+        <a class="btn primary" href="#work">View Work</a>
+        <a class="btn" href="#contact">Contact</a>
+        {% if settings.cv_url %}<a class="btn" href="{{ settings.cv_url }}">Download CV</a>{% endif %}
+      </div>
+    </div>
+    <aside class="hero-card reveal" aria-label="Profile snapshot">
+      <div class="portrait-wrapper">
+        {% set profile_image = settings.profile_image if settings.profile_image else "uploads/unnamed.jpg" %}
+        <img class="portrait" src="{{ profile_image if profile_image.startswith('http') else url_for('static', path=profile_image) }}" width="400" height="300" alt="Profile snapshot">
+      </div>
+      <div class="portrait-meta">
+        {% set profile_badges = settings.profile_badges if settings.profile_badges else "Hands-on Architect\nAutomation + Data\nPlatform Scale" %}
+        {% for badge in profile_badges.split("\n") %}
+          {% if badge.strip() %}<div class="pill">{{ badge.strip() }}</div>{% endif %}
+        {% endfor %}
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section id="impact" aria-label="Impact">
+  <div class="section-head">
+    <div class="kicker"><span>01</span> / IMPACT</div>
+    <div class="subnote">measured outcomes / platform constraints</div>
+  </div>
+  <div class="metrics">
+    {% for metric in impact_metrics %}
+      <div class="metric reveal">
+        <div class="num">{{ metric.value }}</div>
+        <div class="desc">{{ metric.label }}</div>
+        {% if metric.description %}<p>{{ metric.description }}</p>{% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="services" aria-label="Services">
+  <div class="section-head">
+    <div class="kicker"><span>02</span> / SERVICES</div>
+    <div class="subnote">problems I help solve / systems I stabilize</div>
+  </div>
+  <div class="services">
+    {% for service in services %}
+      <article class="service reveal">
+        {% if service.cover_image %}
+          <img class="service-image" src="{{ service.cover_image if service.cover_image.startswith('http') else url_for('static', path=service.cover_image) }}" alt="{{ service.title }}">
+        {% endif %}
+        <div>
+          <div class="tag">{{ service.icon_label }}</div>
+          <h3>{{ service.title }}</h3>
+          <p>{{ service.description }}</p>
+        </div>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="work" aria-label="Work">
+  <div class="section-head">
+    <div class="kicker"><span>03</span> / WORK</div>
+    <div class="subnote">flagship case studies / depth on click</div>
+  </div>
+  <div class="cards">
+    {% for study in case_studies %}
+      <a class="card reveal image-aware-card" href="/case-studies/{{ study.slug }}"
+         {% if study.cover_image %}style="--card-image: url('{{ study.cover_image if study.cover_image.startswith('http') else url_for('static', path=study.cover_image) }}')"{% endif %}>
+        <div class="title">
+          <h3>{{ study.title }}</h3>
+          <div class="tag">{{ study.tag }}</div>
+        </div>
+        <p>{{ study.short_description }}</p>
+        <div class="stack">
+          <span>{{ study.stack }}</span>
+          <span class="impact">{{ study.impact }} <span class="arrow">-&gt;</span></span>
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="projects" aria-label="Projects">
+  <div class="section-head">
+    <div class="kicker"><span>04</span> / PROJECTS</div>
+    <div class="subnote">technical builds / image-led details</div>
+  </div>
+  <div class="project-grid">
+    {% for project in projects %}
+      <a class="project-card reveal" href="/projects/{{ project.slug }}"
+         {% if project.cover_image %}style="--project-image: url('{{ project.cover_image if project.cover_image.startswith('http') else url_for('static', path=project.cover_image) }}')"{% endif %}>
+        <div class="project-card-content">
+          <div class="title">
+            <h3>{{ project.title }}</h3>
+            <div class="tag">{{ project.project_type }}</div>
+          </div>
+          <p>{{ project.description }}</p>
+          <div class="stack">
+            <span>{{ project.stack }}</span>
+            <span class="impact">{{ project.impact }} <span class="arrow">-&gt;</span></span>
+          </div>
+        </div>
+      </a>
+    {% else %}
+      <div class="box reveal">Projects are ready for image-backed admin entries.</div>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="experience" aria-label="Experience">
+  <div class="section-head">
+    <div class="kicker"><span>05</span> / EXPERIENCE</div>
+    <div class="subnote">impact language / platform responsibility</div>
+  </div>
+  <div class="timeline">
+    {% for entry in experience_entries %}
+      <div class="time reveal">{{ entry.period }}</div>
+      <div class="rolebox reveal">
+        <h3>{{ entry.title }}</h3>
+        <div class="meta">{{ entry.meta }}</div>
+        <p>{{ entry.description }}</p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="layers" aria-label="System layers">
+  <div class="section-head">
+    <div class="kicker"><span>06</span> / SYSTEM LAYERS</div>
+    <div class="subnote">architecture framing / not a tool list</div>
+  </div>
+  <div class="layers">
+    {% for row in system_layers %}
+      <div class="layer reveal">
+        <div class="lname">{{ row.layer.layer_key }}</div>
+        <p>{{ row.layer.description }}</p>
+        <ul>
+          {% for item in row.layer_items %}
+            <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="approach" aria-label="Approach">
+  <div class="section-head">
+    <div class="kicker"><span>07</span> / APPROACH</div>
+    <div class="subnote">focused / analytical / repeatable</div>
+  </div>
+  <div class="approach reveal">
+    <ul>
+      {% for item in approach_items %}
+        <li>{{ item.text }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section id="blog-preview" aria-label="Blog preview">
+  <div class="section-head">
+    <div class="kicker"><span>08</span> / ENGINEERING NOTES</div>
+    <div class="subnote">technical notes / implementation thinking</div>
+  </div>
+  <div class="cards">
+    {% for post in blog_posts %}
+      <a class="card reveal image-aware-card" href="/blog/{{ post.slug }}"
+         {% if post.cover_image %}style="--card-image: url('{{ post.cover_image if post.cover_image.startswith('http') else url_for('static', path=post.cover_image) }}')"{% endif %}>
+        <div class="title">
+          <h3>{{ post.title }}</h3>
+          <div class="tag">{{ post.category }}</div>
+        </div>
+        <p>{{ post.excerpt }}</p>
+        <div class="stack"><span>{{ post.tags }}</span><span class="impact">read -&gt;</span></div>
+      </a>
+    {% else %}
+      <div class="box reveal">Engineering notes are ready for the admin panel.</div>
+    {% endfor %}
+  </div>
+</section>
+
+<section id="contact" aria-label="Contact">
+  <div class="section-head">
+    <div class="kicker"><span>09</span> / CONTACT</div>
+    <div class="subnote">recruiters / clients / TLDR notes</div>
+  </div>
+  <div class="contact">
+    <div class="box reveal">
+      <h3>Reach</h3>
+      <p>For roles in automation, industrial systems, or digital transformation.</p>
+      <p class="mono">
+        email: <a href="mailto:{{ settings.contact_email }}">{{ settings.contact_email }}</a><br>
+        linkedin: <a href="{{ settings.linkedin_url }}">{{ settings.linkedin_url }}</a><br>
+        location: {{ settings.location }}
+      </p>
+    </div>
+    <form class="box reveal" action="/newsletter" method="post">
+      <h3>TLDR Technical Notes</h3>
+      <p>Short updates on industrial systems, production tooling, and practical architecture.</p>
+      <div class="inline-form">
+        <input type="email" name="email" placeholder="you@example.com" required>
+        <button class="btn primary" type="submit">Register</button>
+      </div>
+      {% if signup_status == "ok" %}<p class="success">Registered.</p>{% endif %}
+      {% if signup_status == "invalid" %}<p class="error">Use a valid email address.</p>{% endif %}
+    </form>
+  </div>
+  <footer>built.dynamic / fastapi / database-backed</footer>
+</section>
+{% endblock %}

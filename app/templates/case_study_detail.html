@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ case_study.title }}{% endblock %}
+{% block content %}
+<section class="page">
+  <div class="kicker"><span>CASE</span> / {{ case_study.tag }}</div>
+  <h1 class="headline">{{ case_study.title }}</h1>
+  <p class="lede">{{ case_study.subtitle or case_study.short_description }}</p>
+  {% if case_study.cover_image %}
+    <img class="detail-image" src="{{ case_study.cover_image if case_study.cover_image.startswith('http') else url_for('static', path=case_study.cover_image) }}" alt="{{ case_study.title }}">
+  {% endif %}
+  <div class="modal-grid static-detail">
+    <div class="mblock"><h3>Context</h3><p>{{ case_study.context }}</p></div>
+    <div class="mblock"><h3>Constraint</h3><p>{{ case_study.constraint }}</p></div>
+    <div class="mblock"><h3>Architecture</h3><ul>{% for line in split_lines(case_study.architecture_summary) %}<li>{{ line }}</li>{% endfor %}</ul></div>
+    <div class="mblock"><h3>Outcome</h3><ul>{% for line in split_lines(case_study.outcome_summary) %}<li>{{ line }}</li>{% endfor %}</ul></div>
+  </div>
+  {% if case_study.code_line %}<div class="codebox">{{ case_study.code_line }}</div>{% endif %}
+</section>
+{% endblock %}

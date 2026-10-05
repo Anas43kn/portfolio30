@@ -1,0 +1,1085 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Digital Industrial Systems Architect</title>
+  <meta name="description" content="Hands-on Digital Industrial Systems Architect. Automation • Data • Production Integration." />
+
+  <style>
+    :root {
+      --bg: #f7f7f7;
+      --panel: #ffffff;
+      --text: #111111;
+      --muted: rgba(17, 17, 17, 0.66);
+      --faint: rgba(17, 17, 17, 0.14);
+      --rule: rgba(17, 17, 17, 0.12);
+      --shadow: 0 8px 24px rgba(17, 17, 17, 0.06);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      --radius: 16px;
+      --max: 1100px;
+      --ease: cubic-bezier(.2, .8, .2, 1);
+      --t: 220ms;
+      --focus: rgba(17, 17, 17, 0.28);
+      --grid: rgba(17, 17, 17, 0.03);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f0f10;
+      --panel: #141416;
+      --text: rgba(255, 255, 255, 0.92);
+      --muted: rgba(255, 255, 255, 0.68);
+      --faint: rgba(255, 255, 255, 0.16);
+      --rule: rgba(255, 255, 255, 0.12);
+      --shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+      --focus: rgba(255, 255, 255, 0.28);
+      --grid: rgba(255, 255, 255, 0.03);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.55;
+      letter-spacing: -0.01em;
+      transition: background var(--t) var(--ease), color var(--t) var(--ease);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; animation: none !important; }
+    }
+
+    .wrap {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 28px 22px 80px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: color-mix(in srgb, var(--bg) 84%, transparent);
+      border-bottom: 1px solid var(--rule);
+    }
+    .topbar-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 14px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 220px;
+    }
+    .brand .name {
+      font-weight: 650;
+      font-size: 14px;
+      letter-spacing: 0.02em;
+    }
+    .brand .role {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    nav {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .navlink {
+      position: relative;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 13px;
+      padding: 8px 8px;
+      border-radius: 10px;
+      transition: color var(--t) var(--ease), background var(--t) var(--ease);
+    }
+    .navlink:hover { color: var(--text); background: color-mix(in srgb, var(--panel) 72%, transparent); }
+    .navlink[aria-current="true"] { color: var(--text); }
+    .navlink[aria-current="true"]::after {
+      content: "";
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      bottom: 4px;
+      height: 1px;
+      background: var(--text);
+      opacity: 0.75;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: flex-end;
+      min-width: 220px;
+    }
+
+    .btn, .toggle {
+      border: 1px solid var(--rule);
+      background: color-mix(in srgb, var(--panel) 92%, transparent);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 9px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: transform var(--t) var(--ease), background var(--t) var(--ease), border-color var(--t) var(--ease);
+      box-shadow: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      user-select: none;
+      text-decoration: none;
+    }
+    .btn:hover, .toggle:hover { transform: translateY(-1px); border-color: var(--focus); }
+    .btn:active, .toggle:active { transform: translateY(0); }
+    .btn.primary {
+      background: var(--text);
+      color: var(--bg);
+      border-color: transparent;
+    }
+    .btn.primary:hover { background: color-mix(in srgb, var(--text) 88%, transparent); }
+
+    section {
+      scroll-margin-top: 82px;
+      padding: 70px 0 10px;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .kicker {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .kicker span {
+      color: var(--text);
+      opacity: 0.8;
+    }
+
+    .subnote {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .hero {
+      padding-top: 44px;
+      border-bottom: 1px solid var(--rule);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero .grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(circle at 30% 20%, rgba(0,0,0,0.9), transparent 60%);
+      pointer-events: none;
+    }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      align-items: start;
+      padding: 56px 0 28px;
+    }
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .subnote { text-align: left; white-space: normal; }
+      .brand, .actions { min-width: unset; }
+      .topbar-inner { flex-wrap: wrap; }
+      nav { order: 3; width: 100%; justify-content: flex-start; }
+    }
+
+    .headline {
+      font-size: clamp(34px, 5.2vw, 62px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin: 0 0 12px;
+      font-weight: 700;
+    }
+
+    .lede {
+      margin: 0 0 20px;
+      max-width: 58ch;
+      font-size: 16px;
+      color: var(--muted);
+    }
+
+    .micro {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      border: 1px solid var(--rule);
+      background: color-mix(in srgb, var(--panel) 86%, transparent);
+      display: inline-flex;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+    }
+
+    .hero-card {
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .portrait-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .portrait-frame {
+      width: min(260px, 100%);
+      height: auto;
+      transition: transform 300ms var(--ease), opacity 300ms var(--ease);
+      color: var(--text);
+    }
+
+    .portrait-frame:hover { transform: scale(1.02); }
+
+    .portrait-placeholder {
+      font-family: var(--mono);
+      font-size: 12px;
+      fill: var(--muted);
+      text-anchor: middle;
+      letter-spacing: 0.06em;
+    }
+
+    .portrait-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .pillrow { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      border: 1px solid var(--rule);
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--panel) 86%, transparent);
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 900px) { .metrics { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .metrics { grid-template-columns: 1fr; } }
+    .metric {
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: none;
+      transition: transform var(--t) var(--ease), border-color var(--t) var(--ease);
+    }
+    .metric:hover { transform: translateY(-2px); border-color: var(--focus); }
+    .metric .num {
+      font-size: 28px;
+      letter-spacing: -0.02em;
+      font-weight: 750;
+      margin-bottom: 6px;
+    }
+    .metric .desc {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.35;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 900px) { .cards { grid-template-columns: 1fr; } }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: none;
+      transition: transform var(--t) var(--ease), border-color var(--t) var(--ease);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .card:hover { transform: translateY(-2px); border-color: var(--focus); }
+    .card:focus-within { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+    .card .title {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .card h3 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      padding: 6px 8px;
+      background: color-mix(in srgb, var(--panel) 86%, transparent);
+      white-space: nowrap;
+    }
+    .card p { margin: 0 0 12px; color: var(--muted); font-size: 13px; }
+
+    .stack {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--rule);
+      padding-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .stack .impact { color: var(--text); opacity: 0.85; }
+    .arrow {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      transition: transform var(--t) var(--ease), color var(--t) var(--ease);
+    }
+    .card:hover .arrow { transform: translateX(2px); color: var(--text); }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 900px) { .services { grid-template-columns: 1fr; } }
+    .service {
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: 18px;
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform var(--t) var(--ease), border-color var(--t) var(--ease);
+    }
+    .service:hover { transform: translateY(-2px); border-color: var(--focus); }
+    .service h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+      font-weight: 750;
+      letter-spacing: -0.01em;
+    }
+    .service p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .service .service-line {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      border-top: 1px solid var(--rule);
+      padding-top: 10px;
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 16px 24px;
+      align-items: start;
+      position: relative;
+    }
+    @media (max-width: 700px) { .timeline { grid-template-columns: 1fr; } }
+
+    .time {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding-top: 6px;
+    }
+    .rolebox {
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .rolebox h3 { margin: 0 0 6px; font-size: 14px; font-weight: 750; }
+    .rolebox .meta {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .rolebox p { margin: 0; color: var(--muted); font-size: 13px; }
+
+    .layers {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 900px) { .layers { grid-template-columns: 1fr; } }
+    .layer {
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: 16px;
+    }
+    .layer .lname {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--text);
+      opacity: 0.8;
+      margin-bottom: 10px;
+    }
+    .layer ul, .approach ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .layer li, .approach li { margin: 6px 0; }
+
+    .approach {
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+    .approach li { margin: 8px 0; }
+
+    .contact {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 900px) { .contact { grid-template-columns: 1fr; } }
+    .contact .box {
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+    .contact .box h3 { margin: 0 0 10px; font-size: 14px; font-weight: 750; }
+    .contact a {
+      color: var(--text);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+    }
+    .contact a:hover { border-bottom-color: var(--text); }
+
+    footer {
+      padding: 22px 0 10px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 12px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 420ms var(--ease), transform 420ms var(--ease);
+    }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+    dialog {
+      width: min(860px, calc(100% - 36px));
+      border: 1px solid var(--rule);
+      border-radius: 18px;
+      padding: 0;
+      background: var(--panel);
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+    dialog::backdrop { background: rgba(0,0,0,0.4); backdrop-filter: blur(2px); }
+    .modal { padding: 18px; }
+    .modal-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 12px;
+    }
+    .modal h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .modal .mmeta {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .close {
+      border: 1px solid var(--rule);
+      background: transparent;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 10px;
+      cursor: pointer;
+    }
+    .modal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 800px) { .modal-grid { grid-template-columns: 1fr; } }
+    .mblock {
+      border: 1px solid var(--rule);
+      border-radius: 14px;
+      padding: 12px;
+      background: color-mix(in srgb, var(--panel) 88%, transparent);
+    }
+    .mblock h3 {
+      margin: 0 0 8px;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    .mblock p, .mblock ul {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .mblock ul { padding-left: 18px; }
+    .mblock li { margin: 6px 0; }
+
+    .codebox {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      border: 1px solid var(--rule);
+      border-radius: 14px;
+      padding: 12px;
+      margin-top: 12px;
+      background: color-mix(in srgb, var(--panel) 86%, transparent);
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand" aria-label="Site identity">
+        <div class="name">YOUR NAME</div>
+        <div class="role">digital.industrial.systems.architect</div>
+      </div>
+
+      <nav aria-label="Primary navigation">
+        <a class="navlink" href="#services">Services</a>
+        <a class="navlink" href="#work">Work</a>
+        <a class="navlink" href="#experience">Experience</a>
+        <a class="navlink" href="#layers">System Layers</a>
+        <a class="navlink" href="#approach">Approach</a>
+        <a class="navlink" href="#contact">Contact</a>
+      </nav>
+
+      <div class="actions">
+        <button class="toggle" id="themeToggle" type="button" aria-label="Toggle theme">
+          <span style="font-family: var(--mono); font-size: 12px;">Light</span>
+          <span style="opacity: .55;">/</span>
+          <span style="font-family: var(--mono); font-size: 12px; opacity: .6;">Dark</span>
+        </button>
+        <a class="btn primary" href="#work">View Work</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero" id="top" aria-label="Hero">
+      <div class="grid" aria-hidden="true"></div>
+
+      <div class="hero-inner">
+        <div>
+          <div class="kicker"><span>00</span> / HERO</div>
+          <h1 class="headline reveal">I architect scalable production systems across automation and data.</h1>
+          <p class="lede reveal">
+            Mechatronics engineer focused on standardization, integration, and production reliability in automated manufacturing environments.
+            Bridging PLC systems, software layers, and structured data to stabilize and scale complex machine platforms.
+          </p>
+          <div class="micro reveal">// PLC → Interface → Data → Manufacturing</div>
+
+          <div style="margin-top: 18px; display:flex; gap:10px; flex-wrap: wrap;" class="reveal">
+            <a class="btn primary" href="#work">View Work</a>
+            <a class="btn" href="#contact">Contact</a>
+            <a class="btn" href="#" onclick="alert('Add your CV link here.'); return false;">Download CV</a>
+          </div>
+        </div>
+
+        <aside class="hero-card reveal" aria-label="Profile snapshot">
+          <div class="portrait-wrapper">
+            <svg class="portrait-frame" viewBox="0 0 400 400" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Profile snapshot placeholder">
+              <defs>
+                <clipPath id="hexClip">
+                  <polygon points="200,20 350,110 350,290 200,380 50,290 50,110" />
+                </clipPath>
+              </defs>
+              <polygon points="200,20 350,110 350,290 200,380 50,290 50,110" fill="color-mix(in srgb, var(--panel) 82%, transparent)" stroke="currentColor" stroke-width="2" opacity="0.42" />
+              <g clip-path="url(#hexClip)">
+                <rect x="50" y="20" width="300" height="360" fill="color-mix(in srgb, var(--text) 5%, transparent)" />
+                <path d="M90 285 C145 235, 250 235, 310 285" fill="none" stroke="currentColor" stroke-width="2" opacity="0.18" />
+                <circle cx="200" cy="155" r="54" fill="none" stroke="currentColor" stroke-width="2" opacity="0.18" />
+                <line x1="90" y1="318" x2="310" y2="318" stroke="currentColor" stroke-width="1" opacity="0.12" />
+                <image href="unnamed.jpg" width="400" height="500" clip-path="url(#hexClip)" preserveAspectRatio="xMidYMid slice" />
+              </g>
+              <!-- To use a real image, replace the placeholder group above with:
+              <image href="your-photo.jpg" width="400" height="400" clip-path="url(#hexClip)" preserveAspectRatio="xMidYMid slice" />
+              -->
+            </svg>
+          </div>
+
+          <div class="portrait-meta">
+            <div class="pill">Hands-on Architect</div>
+            <div class="pill">Automation + Data</div>
+            <div class="pill">Platform Scale</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="impact" aria-label="Impact">
+      <div class="section-head">
+        <div class="kicker"><span>01</span> / IMPACT</div>
+        <div class="subnote">measured outcomes · platform constraints</div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric reveal">
+          <div class="num">40%</div>
+          <div class="desc">Reduction in machine testing cycle time</div>
+        </div>
+        <div class="metric reveal">
+          <div class="num">€2M</div>
+          <div class="desc">Industrial machine platforms executed at scale</div>
+        </div>
+        <div class="metric reveal">
+          <div class="num">6 mo</div>
+          <div class="desc">From prototype to production-ready platform</div>
+        </div>
+        <div class="metric reveal">
+          <div class="num">Zero</div>
+          <div class="desc">Tolerance for delivery failure on critical path</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" aria-label="Services">
+      <div class="section-head">
+        <div class="kicker"><span>02</span> / SERVICES</div>
+        <div class="subnote">problems I help solve · systems I stabilize</div>
+      </div>
+
+      <div class="services">
+        <article class="service reveal">
+          <div>
+            <div class="tag">automation.integration</div>
+            <h3 style="margin-top: 12px;">PLC-to-Interface Integration</h3>
+            <p>Design and improve production interfaces that connect automation layers with operators, test workflows, and structured data.</p>
+          </div>
+          <div class="service-line">output: faster commissioning · fewer manual loops</div>
+        </article>
+
+        <article class="service reveal">
+          <div>
+            <div class="tag">production.tooling</div>
+            <h3 style="margin-top: 12px;">Production Tool Modernization</h3>
+            <p>Transform fragile Excel/VBA workflows into structured tools using SQL-backed logic, JavaScript interfaces, and maintainable data models.</p>
+          </div>
+          <div class="service-line">output: stable rules · scalable configuration logic</div>
+        </article>
+
+        <article class="service reveal">
+          <div>
+            <div class="tag">industrialization</div>
+            <h3 style="margin-top: 12px;">Prototype-to-Production Stabilization</h3>
+            <p>Lock repeatable assembly, electrical integration, testing, and validation workflows so production teams do not restart from zero.</p>
+          </div>
+          <div class="service-line">output: reduced risk · protected delivery timelines</div>
+        </article>
+      </div>
+    </section>
+
+
+    <section id="work" aria-label="Work">
+      <div class="section-head">
+        <div class="kicker"><span>03</span> / WORK</div>
+        <div class="subnote">3 flagship case studies · depth on click</div>
+      </div>
+
+      <div class="cards">
+        <article class="card reveal" tabindex="0" role="button" data-project="testing" aria-label="Open case study: Web-based PLC testing architecture">
+          <div class="title">
+            <h3>Web-Based PLC Testing Architecture</h3>
+            <div class="tag">commissioning.system</div>
+          </div>
+          <p>Replaced legacy HMI workflow and manual PLC data handling with an integrated web interface directly connected to PLC systems.</p>
+          <div class="stack">
+            <span>stack: PLC / web / structured data</span>
+            <span class="impact">impact: ~40% cycle-time ↓ <span class="arrow">→</span></span>
+          </div>
+        </article>
+
+        <article class="card reveal" tabindex="0" role="button" data-project="rules" aria-label="Open case study: Excel to SQL rule engine">
+          <div class="title">
+            <h3>Excel Chaos → SQL Rule Engine</h3>
+            <div class="tag">rules.engine</div>
+          </div>
+          <p>Structured complex configuration logic into a database-backed rule system with a JavaScript execution layer for maintainability and scalability.</p>
+          <div class="stack">
+            <span>stack: SQL / JS / Excel migration</span>
+            <span class="impact">impact: logic stabilized <span class="arrow">→</span></span>
+          </div>
+        </article>
+
+        <article class="card reveal" tabindex="0" role="button" data-project="platform" aria-label="Open case study: Machine platform industrialization">
+          <div class="title">
+            <h3>Machine Platform Industrialization</h3>
+            <div class="tag">platform.scale</div>
+          </div>
+          <p>Industrialized large automated packaging systems from engineering builds to repeatable production processes, under tight delivery constraints.</p>
+          <div class="stack">
+            <span>scope: €2M platforms / 6-month cycles</span>
+            <span class="impact">impact: risk contained <span class="arrow">→</span></span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="experience" aria-label="Experience">
+      <div class="section-head">
+        <div class="kicker"><span>04</span> / EXPERIENCE</div>
+        <div class="subnote">impact language · platform responsibility</div>
+      </div>
+
+      <div class="timeline">
+        <div class="time reveal">202X → Present</div>
+        <div class="rolebox reveal">
+          <h3>Industrial Systems Architect / Automation Engineer</h3>
+          <div class="meta">manufacturing · automation · production integration</div>
+          <p>Drove standardization and integration across PLC, interface, and data layers. Modernized commissioning workflows and stabilized production processes under delivery-critical constraints.</p>
+        </div>
+
+        <div class="time reveal">Key Missions</div>
+        <div class="rolebox reveal">
+          <h3>Industrialization & Platform Transition</h3>
+          <div class="meta">6 months · €2M machinery · cross-disciplinary integration</div>
+          <p>Structured prototype-to-production workflows to prevent reset-to-zero rebuilds. Coordinated electrical integration and safety debugging alongside a team of electricians, ensuring repeatability and compliance.</p>
+        </div>
+
+        <div class="time reveal">Operations</div>
+        <div class="rolebox reveal">
+          <h3>Production IT Tooling Governance</h3>
+          <div class="meta">maintenance → stabilization → improvement</div>
+          <p>Managed and maintained production-facing tools for service and manufacturing needs, reducing operational friction and increasing reliability in day-to-day industrial workflows.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="layers" aria-label="System layers">
+      <div class="section-head">
+        <div class="kicker"><span>05</span> / SYSTEM LAYERS</div>
+        <div class="subnote">architecture framing · not a tool list</div>
+      </div>
+
+      <div class="layers">
+        <div class="layer reveal">
+          <div class="lname">automation.layer</div>
+          <ul>
+            <li>PLC logic, commissioning, validation</li>
+            <li>Industrial networking & connectivity</li>
+            <li>Safety debugging and integration constraints</li>
+          </ul>
+        </div>
+        <div class="layer reveal">
+          <div class="lname">application.layer</div>
+          <ul>
+            <li>Web interfaces for production workflows</li>
+            <li>JavaScript integration and UI logic</li>
+            <li>Human-proofing: reducing manual steps</li>
+          </ul>
+        </div>
+        <div class="layer reveal">
+          <div class="lname">data.layer</div>
+          <ul>
+            <li>SQL-backed configuration and rules</li>
+            <li>Structured data flows and traceability</li>
+            <li>Excel-to-database migration strategy</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="approach" aria-label="Approach">
+      <div class="section-head">
+        <div class="kicker"><span>06</span> / APPROACH</div>
+        <div class="subnote">focused · analytical · repeatable</div>
+      </div>
+
+      <div class="approach reveal">
+        <ul>
+          <li>Reduce fragility in production workflows by removing manual bottlenecks.</li>
+          <li>Separate logic from interface layers to enable maintainability and scale.</li>
+          <li>Standardize repeatable integration processes across machine variants.</li>
+          <li>Design systems for traceability, validation, and delivery reliability.</li>
+          <li>Prioritize critical-path improvements with measurable time ROI.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="contact" aria-label="Contact">
+      <div class="section-head">
+        <div class="kicker"><span>07</span> / CONTACT</div>
+        <div class="subnote">recruiters · clients · collaboration</div>
+      </div>
+
+      <div class="contact">
+        <div class="box reveal">
+          <h3>Reach</h3>
+          <p style="margin:0 0 10px; color: var(--muted); font-size: 13px;">For roles in automation, industrial systems, or digital transformation.</p>
+          <p style="margin:0; font-family: var(--mono); font-size: 13px;">
+            email: <a href="mailto:you@example.com">you@example.com</a><br/>
+            linkedin: <a href="#" onclick="alert('Add your LinkedIn URL here.'); return false;">/in/yourprofile</a>
+          </p>
+        </div>
+
+        <div class="box reveal">
+          <h3>Availability</h3>
+          <p style="margin:0; color: var(--muted); font-size: 13px;">
+            Open to high-level automation companies and large manufacturing groups. Projects involving standardization, integration, commissioning efficiency, and platform scale.
+          </p>
+          <div class="codebox">// preferred.work = [ automation, data, production.integration ]</div>
+        </div>
+      </div>
+
+      <footer>built.monochrome · single.file · smooth.scroll</footer>
+    </section>
+  </main>
+
+  <dialog id="caseModal" aria-label="Case study details">
+    <div class="modal">
+      <div class="modal-top">
+        <div>
+          <h2 id="mTitle">Case Study</h2>
+          <div class="mmeta" id="mMeta">meta</div>
+        </div>
+        <button class="close" id="mClose" aria-label="Close">Close</button>
+      </div>
+
+      <div class="modal-grid">
+        <div class="mblock">
+          <h3>Context</h3>
+          <p id="mContext"></p>
+        </div>
+        <div class="mblock">
+          <h3>Constraint</h3>
+          <p id="mConstraint"></p>
+        </div>
+        <div class="mblock">
+          <h3>Architecture</h3>
+          <ul id="mArch"></ul>
+        </div>
+        <div class="mblock">
+          <h3>Outcome</h3>
+          <ul id="mOutcome"></ul>
+        </div>
+      </div>
+
+      <div class="codebox" id="mCode"></div>
+    </div>
+  </dialog>
+
+  <script>
+    const root = document.documentElement;
+    const toggle = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('theme');
+    if (saved) root.setAttribute('data-theme', saved);
+
+    toggle.addEventListener('click', () => {
+      const current = root.getAttribute('data-theme');
+      const next = current === 'dark' ? '' : 'dark';
+      if (next) root.setAttribute('data-theme', next);
+      else root.removeAttribute('data-theme');
+      localStorage.setItem('theme', next);
+    });
+
+    const revealEls = [...document.querySelectorAll('.reveal')];
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('is-visible');
+      });
+    }, { threshold: 0.08 });
+    revealEls.forEach(el => io.observe(el));
+
+    const navLinks = [...document.querySelectorAll('.navlink')];
+    const sections = navLinks.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+    const navIO = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        const id = entry.target.getAttribute('id');
+        const link = navLinks.find(a => a.getAttribute('href') === `#${id}`);
+        if (!link) return;
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => a.removeAttribute('aria-current'));
+          link.setAttribute('aria-current', 'true');
+        }
+      });
+    }, { rootMargin: "-45% 0px -45% 0px", threshold: 0.01 });
+    sections.forEach(s => navIO.observe(s));
+
+    const modal = document.getElementById('caseModal');
+    const mClose = document.getElementById('mClose');
+
+    const projects = {
+      testing: {
+        title: "Web-Based PLC Testing Architecture",
+        meta: "commissioning.system · critical path improvement",
+        context: "Machine testing process for large automated systems in delivery-critical environments.",
+        constraint: "Legacy workflow relied on USB exports and laptop back-and-forth with PLC data, adding unnecessary steps.",
+        arch: [
+          "Direct PLC communication from a web interface",
+          "Centralized UI for test execution and validation",
+          "Structured data availability by design, without manual transfers"
+        ],
+        outcome: [
+          "~40% reduction in testing cycle time",
+          "Removed manual bottlenecks and fragile handling",
+          "Improved repeatability and operational clarity"
+        ],
+        code: "// workflow: legacy.usb.loop -> integrated.web.plc.interface\nPLC ↔ Web Interface ↔ Structured Data → Test Validation"
+      },
+      rules: {
+        title: "Excel Chaos → SQL Rule Engine",
+        meta: "rules.engine · standardization at scale",
+        context: "Production tooling built on complex Excel logic and nested rule structures across machine variants.",
+        constraint: "Spreadsheet logic becomes fragile, hard to maintain, and difficult to scale across platforms.",
+        arch: [
+          "Rule logic structured into a SQL database",
+          "JavaScript execution layer to apply rules consistently",
+          "Clear separation: data model ↔ logic ↔ interface"
+        ],
+        outcome: [
+          "Stabilized rule execution and maintainability",
+          "Improved scalability across configurations",
+          "Reduced long-term operational fragility"
+        ],
+        code: "// principle: separate.logic.from.interface\nSQL(rule.model) → JS(engine) → outputs(production.artifacts)"
+      },
+      platform: {
+        title: "Machine Platform Industrialization",
+        meta: "platform.scale · risk containment",
+        context: "Industrialization of large packaging and production-line machinery for final clients, with machines around the €2M scale.",
+        constraint: "No room for failure: slips affect delivery date, lead time, and project margin.",
+        arch: [
+          "Locked repeatable assembly and integration processes",
+          "Coordinated electrical integration and safety debugging",
+          "Validated procedures so production does not rebuild from scratch"
+        ],
+        outcome: [
+          "Reduced rework risk across future builds",
+          "Improved production readiness and repeatability",
+          "Protected delivery timelines under high constraints"
+        ],
+        code: "// industrialization: prototype -> repeatable.production\nprocess.lock-in → integration.standardization → delivery.protection"
+      }
+    };
+
+    function fillList(ul, items) {
+      ul.innerHTML = "";
+      items.forEach(t => {
+        const li = document.createElement('li');
+        li.textContent = t;
+        ul.appendChild(li);
+      });
+    }
+
+    function openProject(key) {
+      const p = projects[key];
+      if (!p) return;
+      document.getElementById('mTitle').textContent = p.title;
+      document.getElementById('mMeta').textContent = p.meta;
+      document.getElementById('mContext').textContent = p.context;
+      document.getElementById('mConstraint').textContent = p.constraint;
+      fillList(document.getElementById('mArch'), p.arch);
+      fillList(document.getElementById('mOutcome'), p.outcome);
+      document.getElementById('mCode').textContent = p.code;
+
+      if (typeof modal.showModal === "function") modal.showModal();
+      else alert("Your browser does not support dialog. Use a modern browser.");
+    }
+
+    document.querySelectorAll('[data-project]').forEach(card => {
+      const key = card.getAttribute('data-project');
+      card.addEventListener('click', () => openProject(key));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          openProject(key);
+        }
+      });
+    });
+
+    mClose.addEventListener('click', () => modal.close());
+    modal.addEventListener('click', (e) => {
+      const rect = modal.getBoundingClientRect();
+      const inDialog = rect.top <= e.clientY && e.clientY <= rect.top + rect.height && rect.left <= e.clientX && e.clientX <= rect.left + rect.width;
+      if (!inDialog) modal.close();
+    });
+  </script>
+</body>
+</html>

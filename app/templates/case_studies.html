@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Case Studies{% endblock %}
+{% block content %}
+<section class="page">
+  <div class="section-head">
+    <div class="kicker"><span>CS</span> / CASE STUDIES</div>
+    <div class="subnote">published work</div>
+  </div>
+  <div class="cards">
+    {% for study in case_studies %}
+      <a class="card reveal" href="/case-studies/{{ study.slug }}">
+        <div class="title"><h3>{{ study.title }}</h3><div class="tag">{{ study.tag }}</div></div>
+        <p>{{ study.short_description }}</p>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
